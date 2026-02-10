@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>LBricolage - Tanger</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+body{
+font-family:'Segoe UI', sans-serif;
+background:#f9f9f9;
+color:#333;
+margin:0;
+padding:0;
+}
+
+
+header{
+background:#fff;
+color:#0d6efd;
+padding:20px 0;
+text-align:center;
+border-bottom:1px solid #ddd;
+font-weight:700;
+font-size:24px;
+}
+
+
+.container{
+display:flex;
+flex-wrap:wrap;
+max-width:900px;
+margin:30px auto;
+gap:20px;
+}
+
+
+.left, .right{
+background:#fff;
+padding:25px;
+border-radius:12px;
+box-shadow:0 2px 8px rgba(0,0,0,0.05);
+flex:1 1 400px;
+}
+
+
+h2{ color:#0d6efd; margin-bottom:20px; font-size:22px; }
+
+
+label{ display:block; margin-top:15px; font-weight:600; font-size:14px; }
+input, textarea, select, button{
+width:100%;
+padding:12px;
+margin-top:6px;
+border-radius:8px;
+border:1px solid #ccc;
+font-size:14px;
+outline:none;
+}
+textarea{ resize:none; }
+
+
+button{
+background:#0d6efd;
+color:white;
+border:none;
+}
+
+.day-night-game{
+  margin-top:30px;
+  padding:20px;
+  background:#fff3cd;
+  border:1px solid #ffeeba;
+  border-radius:10px;
+  text-align:center;
+}
+.day-night-game button{
+  margin:10px;
+  background:#ffc107;
+  color:#212529;
+  border:none;
+  border-radius:8px;
+  padding:10px 15px;
+  cursor:pointer;
+  font-weight:600;
+  transition:0.2s;
+}
+.day-night-game button:hover{
+  background:#e0a800;
+}
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>LBricolage</h1>
+  <p>Services de bricolage – Tanger uniquement</p>
+</header>
+
+<div class="container">
+  <h2>Décrire votre problème</h2>
+
+  <label>Nom</label>
+  <input type="text" id="name" placeholder="Votre nom">
+
+  <label>Téléphone</label>
+  <input type="tel" id="phone" placeholder="06xxxxxxxx">
+
+  <label>Type de problème</label>
+  <select id="type">
+    <option>Plomberie</option>
+    <option>Électricité</option>
+    <option>Bricolage général</option>
+  </select>
+
+  <label>Description</label>
+  <textarea id="desc" rows="3" placeholder="Expliquez votre problème"></textarea>
+
+  <button onclick="sendRequest()">Demander le prix</button>
+
+  <div id="priceSection" class="price-box hidden">
+    <h3>Proposer votre prix</h3>
+    <input type="number" id="priceInput" class="price-input" placeholder="Ex: 150 MAD">
+    <div class="accept-no-buttons">
+      <button onclick="respondPrice('accept')">Accepter</button>
+      <button onclick="respondPrice('no')" style="background:#dc3545;">Refuser</button>
+    </div>
+  </div>
+
+  <div id="locationSection" class="price-box hidden">
+    <h3 class="success">Localisation confirmée 📍</h3>
+    <label>Adresse / Quartier</label>
+    <input type="text" id="manualLocation" placeholder="Ex: Malabata, Tanger">
+    <button onclick="confirmLocation()">Envoyer la localisation</button>
+    <p id="locationResult" class="success"></p>
+  </div>
+</div>
+
+<script>
+  function sendRequest(){
+    const name=document.getElementById('name').value;
+    const phone=document.getElementById('phone').value;
+    const desc=document.getElementById('desc').value;
+
+    if(!name || !phone || !desc){
+      alert('Veuillez remplir tous les champs');
+      return;
+    }
+
+    document.getElementById('priceSection').classList.remove('hidden');
+  }
+
+  function respondPrice(answer){
+    if(answer==='accept'){
+      document.getElementById('locationSection').classList.remove('hidden');
+    } else {
+      alert('Vous avez refusé le prix');
+      document.getElementById('priceSection').classList.add('hidden');
+    }
+  }
+
+  function confirmLocation(){
+    const loc = document.getElementById('manualLocation').value;
+    if(!loc){
+      alert('Veuillez entrer votre localisation');
+      return;
+    }
+    document.getElementById('locationResult').innerText = 'Localisation reçue : ' + loc + ' ✅';
+  }
+ 
+</script>
+
+</body>
+</html>

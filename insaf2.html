@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>LBricolage - Tanger</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body{
+      font-family:'Segoe UI', sans-serif;
+      background:#f9f9f9;
+      color:#333;
+      margin:0;
+      padding:0;
+      transition: background 0.5s, color 0.5s;
+    }
+
+    header{
+      background:#fff;
+      color:#0d6efd;
+      padding:20px 0;
+      text-align:center;
+      border-bottom:1px solid #ddd;
+      font-weight:700;
+      font-size:24px;
+      transition: background 0.5s, color 0.5s;
+    }
+
+    .container{
+      display:flex;
+      flex-wrap:wrap;
+      max-width:900px;
+      margin:30px auto;
+      gap:20px;
+      transition: background 0.5s, color 0.5s;
+    }
+
+    .left, .right{
+      background:#fff;
+      padding:25px;
+      border-radius:12px;
+      box-shadow:0 2px 8px rgba(0,0,0,0.05);
+      flex:1 1 400px;
+      transition: background 0.5s, color 0.5s;
+    }
+
+    h2{ color:#0d6efd; margin-bottom:20px; font-size:22px; }
+
+    label{ display:block; margin-top:15px; font-weight:600; font-size:14px; }
+    input, textarea, select, button{
+      width:100%;
+      padding:12px;
+      margin-top:6px;
+      border-radius:8px;
+      border:1px solid #ccc;
+      font-size:14px;
+      outline:none;
+      transition: background 0.5s, color 0.5s;
+    }
+    textarea{ resize:none; }
+
+    button{
+      background:#0d6efd;
+      color:white;
+      border:none;
+      margin-top:20px;
+      cursor:pointer;
+      font-weight:600;
+      transition:0.3s;
+    }
+    button:hover{ background:#0b5ed7; transform:translateY(-1px); }
+
+    .price-box{
+      background:#f1f1f1;
+      padding:20px;
+      border-radius:10px;
+      margin-top:15px;
+      transition: background 0.5s, color 0.5s;
+    }
+    .accept-no-buttons{
+      display:flex;
+      justify-content:space-between;
+      margin-top:15px;
+      gap:10px;
+    }
+    .accept-no-buttons button:last-child{ background:#dc3545; }
+
+    .success{ color:#198754; font-weight:600; margin-top:10px; }
+
+    /* Full page day/night toggle */
+    .moon-toggle{
+      margin-top:30px;
+      text-align:center;
+    }
+    #moon{
+      width:80px;
+      height:80px;
+      border-radius:50%;
+      background:white;
+      cursor:pointer;
+      transition: background 0.5s, box-shadow 0.5s;
+      display:inline-block;
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    }
+    #moon.night{
+      background:#212529;
+      box-shadow: 0 0 15px rgba(255,255,255,0.5);
+    }
+  </style>
+</head>
+<body>
+
+<header>LBricolage – Tanger</header>
+
+<div class="container">
+  <div class="left">
+    <h2>Décrire votre problème</h2>
+    <label>Nom</label>
+    <input type="text" id="name" placeholder="Votre nom">
+
+    <label>Téléphone</label>
+    <input type="tel" id="phone" placeholder="06xxxxxxxx">
+
+    <label>Type de problème</label>
+    <select id="type">
+      <option>Plomberie</option>
+      <option>Électricité</option>
+      <option>Bricolage général</option>
+    </select>
+
+    <label>Description</label>
+    <textarea id="desc" rows="3" placeholder="Expliquez votre problème"></textarea>
+
+    <button onclick="sendRequest()">Demander le prix</button>
+  </div>
+
+  <div class="right">
+    <div id="priceSection" class="price-box hidden">
+      <h3>Proposer votre prix</h3>
+      <input type="number" id="priceInput" placeholder="Ex: 150 MAD">
+      <div class="accept-no-buttons">
+        <button onclick="respondPrice('accept')">Accepter</button>
+        <button onclick="respondPrice('no')">Refuser</button>
+      </div>
+    </div>
+
+    <div id="locationSection" class="price-box hidden">
+      <h3 class="success">Localisation confirmée 📍</h3>
+      <label>Adresse / Quartier</label>
+      <input type="text" id="manualLocation" placeholder="Ex: Malabata, Tanger">
+      <button onclick="confirmLocation()">Envoyer la localisation</button>
+      <p id="locationResult" class="success"></p>
+    </div>
+
+    <!-- Moon toggle -->
+    <div class="moon-toggle">
+      <div id="moon" onclick="toggleMoon()"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function sendRequest(){
+    const name=document.getElementById('name').value;
+    const phone=document.getElementById('phone').value;
+    const desc=document.getElementById('desc').value;
+
+    if(!name || !phone || !desc){
+      alert('Veuillez remplir tous les champs');
+      return;
+    }
+
+    document.getElementById('priceSection').classList.remove('hidden');
+  }
+
+  function respondPrice(answer){
+    if(answer==='accept'){
+      document.getElementById('locationSection').classList.remove('hidden');
+    } else {
+      alert('Vous avez refusé le prix');
+      document.getElementById('priceSection').classList.add('hidden');
+    }
+  }
+
+  function confirmLocation(){
+    const loc = document.getElementById('manualLocation').value;
+    if(!loc){
+      alert('Veuillez entrer votre localisation');
+      return;
+    }
+    document.getElementById('locationResult').innerText = 'Localisation reçue : ' + loc + ' ✅';
+  }
+
+  // Full page day/night toggle
+  let nightMode = false;
+  function toggleMoon(){
+    nightMode = !nightMode;
+    if(nightMode){
+      document.body.style.background = '#212529';
+      document.body.style.color = 'white';
+      document.getElementById('moon').classList.add('night');
+    } else {
+      document.body.style.background = '#f9f9f9';
+      document.body.style.color = '#333';
+      document.getElementById('moon').classList.remove('night');
+    }
+  }
+</script>
+
+</body>
+</html>
